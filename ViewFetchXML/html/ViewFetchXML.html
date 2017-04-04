@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View FetchXML</title>
+    <script type="text/jscript" src="../ClientGlobalContext.js.aspx"></script>
+    <link rel="stylesheet" href="../pl_css/codemirror.css">
+    <link rel="stylesheet" href="../pl_css/ViewFetchXML.css">
+    <script src="../pl_script/codemirror.js"></script>
+    <script src="../pl_script/vkbeautify.js"></script>
+    <script src="../pl_script/codemirror_mode_xml.js"></script>
+    <script src="../pl_script/codemirror_mode_javascript.js"></script>
+    <script src="../pl_script/codemirror_mode_clike.js"></script>
+    <script src="../pl_script/ViewFetchXML.js"></script>
+    <script src="../pl_script/clipboard.min.js"></script>
+</head>
+<body>
+    <div id="h2">View FetchXML by <a href="http://phuocle.net" target="_blank">PhuocLe</a></div>
+
+    <div class="tab">
+        <a href="javascript:void(0)" class="tablinks active" onclick="openTab(event, 'FetchXML')">FetchXML</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Javascript')">Javascript</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'CSharp')">CSharp</a>
+    </div>
+
+    <div id="FetchXML" class="tabcontent" style="display:block;">
+        <form>
+            <textarea id="fetchXml" name="fetchXml"></textarea><br />
+        </form>
+    </div>
+    <div id="Javascript" class="tabcontent" style="display:block;">
+        <form>
+            <textarea id="fetchXmlJs" name="fetchXmlJs"></textarea><br />
+        </form>
+    </div>
+    <div id="CSharp" class="tabcontent" style="display:block;">
+        <form>
+            <textarea id="fetchXmlCsharp" name="fetchXmlCsharp"></textarea><br />
+        </form>
+    </div>
+    <div class="button">
+        <button class="copyFetchXML">Copy FetchXML</button>
+        <button class="copyJavascript" style="display:none;">Copy Javascript</button>
+        <button class="copyCSharp" style="display:none;">Copy CSharp</button>
+    </div>
+    <script type="text/javascript">
+        onViewFetchXMLLoad();
+        onViewFetchXMLJsLoad();
+        onViewFetchXMLCSharpLoad();
+
+        initClipboard_FetchXML();
+        initClipboard_Js();
+        initClipboard_CSharp();
+
+        document.getElementById("Javascript").style.display = "none";
+        document.getElementById("CSharp").style.display = "none";
+    </script>
+</body>
+</html>
