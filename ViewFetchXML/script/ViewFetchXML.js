@@ -41,20 +41,34 @@ function onViewFetchXMLJsLoad() {
     var lines = vkbeautify.xml(fetchXml, 2).split('\n');
     var fetch = "";
     var data = [];
+    var name = "";
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
+        var space = line.substring(0, line.indexOf("<"));
         if (line.trim().startsWith("<condition")) {
-            var parts = line.trim().split(" ");
-            if (parts.length == 4 || parts.length == 6) {
-                var space = line.substring(0, line.indexOf("<"));
-                var attributes = parts[1].split("'");
-                values = parts.length == 4 ? parts[3].split("'") : parts[5].split("'");
-                var name = attributes[1];
-                var value = values[1];
+            var pattern = /('(.*?)' |'(.*?)'\/>)/g;
+            var arr = line.match(new RegExp(pattern));
+            name = arr[0].substring(1, arr[0].length - 2);
+            if (arr.length === 3 || arr.length === 5) {
+                var operator = arr[1].substring(1, arr[1].length - 2);
+                var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
                 var fetchData = getFetchData(data, name, value);
                 codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
                 data.push({ name: fetchData.name, value: fetchData.value });
-                fetch += '"' + space + parts[0] + " " + parts[1] + " " + parts[2] + " value='" + '", ' + codeValue + ', "' + "'" + ' />",\n';
+                fetch += '"' + space + "<condition attribute='" + name + "' operator='" + operator + "' value='" + '", ' + codeValue + ', "' + "'" + '/>",\n';
+            }
+            else
+                fetch += '"' + line + '",\n';
+        }
+        else if (line.trim().startsWith("<value")) {
+            var pattern = />.*</g;
+            var arr = line.match(new RegExp(pattern));
+            if (arr.length === 1) {
+                var value = arr[0].substring(1, arr[0].length - 1);
+                var fetchData = getFetchData(data, name, value);
+                codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
+                data.push({ name: fetchData.name, value: fetchData.value });
+                fetch += '"' + space + '<value>", ' + codeValue + ',"</value>",\n';
             }
             else
                 fetch += '"' + line + '",\n';
@@ -66,14 +80,16 @@ function onViewFetchXMLJsLoad() {
     copied += fetch.substring(0, fetch.length - 1);
     copied += "\r\n";
     copied += '\t].join("");';
-    var declare = "\tvar fetchData = {\r\n";
-    for (var i = 0; i < data.length; i++) {
-        declare += "\t\t" + data[i].name + ": " + '"' + data[i].value + '",\r\n'
+    var declare = "";
+    if (data.length > 0) {
+        declare = "\tvar fetchData = {\r\n";
+        for (var i = 0; i < data.length; i++) {
+            declare += "\t\t" + data[i].name + ": " + '"' + data[i].value + '",\r\n'
+        }
+        declare = declare.substring(0, declare.length - ",\r\n".length);
+        declare += "\n";
+        declare += "\t};\r\n";
     }
-    declare = declare.substring(0, declare.length - ",\r\n".length);
-    declare += "\n";
-    declare += "\t};\r\n";
-
     var js = declare + copied;
     localStorage.setItem("js", js);
     editor.setValue(js);
@@ -92,20 +108,34 @@ function onViewFetchXMLCSharpLoad() {
     var lines = vkbeautify.xml(fetchXml, 2).split('\n');
     var fetch = "";
     var data = [];
+    var name = "";
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
+        var space = line.substring(0, line.indexOf("<"));
         if (line.trim().startsWith("<condition")) {
-            var parts = line.trim().split(" ");
-            if (parts.length == 4 || parts.length == 6) {
-                var space = line.substring(0, line.indexOf("<"));
-                var attributes = parts[1].split("'");
-                values = parts.length == 4 ? parts[3].split("'") : parts[5].split("'");
-                var name = attributes[1];
-                var value = values[1];
+            var pattern = /('(.*?)' |'(.*?)'\/>)/g;
+            var arr = line.match(new RegExp(pattern));
+            name = arr[0].substring(1, arr[0].length - 2);
+            if (arr.length === 3 || arr.length === 5) {
+                var operator = arr[1].substring(1, arr[1].length - 2);
+                var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
                 var fetchData = getFetchData(data, name, value);
                 codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
                 data.push({ name: fetchData.name, value: fetchData.value });
-                fetch += space + parts[0] + " " + parts[1] + " " + parts[2] + " value='{ " + codeValue + " }' />\n";
+                fetch += space + "<condition attribute='" + name + "' operator='" + operator + "' value='{" + codeValue + "}'/>\n";
+            }
+            else
+                fetch += line + '\n';
+        }
+        else if (line.trim().startsWith("<value")) {
+            var pattern = />.*</g;
+            var arr = line.match(new RegExp(pattern));
+            if (arr.length === 1) {
+                var value = arr[0].substring(1, arr[0].length - 1);
+                var fetchData = getFetchData(data, name, value);
+                codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
+                data.push({ name: fetchData.name, value: fetchData.value });
+                fetch += space + '<value>{' + codeValue + '}</value>,\n';
             }
             else
                 fetch += line + '\n';
@@ -117,13 +147,16 @@ function onViewFetchXMLCSharpLoad() {
     copied += fetch.substring(0, fetch.length - 1);
     copied += "\r\n";
     copied += '";';
-    var declare = "\tvar fetchData = new {\r\n";
-    for (var i = 0; i < data.length; i++) {
-        declare += "\t\t" + data[i].name + " = " + '"' + data[i].value + '",\r\n'
+    var declare = ""
+    if (data.length > 0) {
+        declare = "\tvar fetchData = new {\r\n";
+        for (var i = 0; i < data.length; i++) {
+            declare += "\t\t" + data[i].name + " = " + '"' + data[i].value + '",\r\n'
+        }
+        declare = declare.substring(0, declare.length - ",\r\n".length);
+        declare += "\n";
+        declare += "\t};\r\n";
     }
-    declare = declare.substring(0, declare.length - ",\r\n".length);
-    declare += "\n";
-    declare += "\t};\r\n";
     var csharp = declare + copied;
     localStorage.setItem("csharp", csharp);
     editor.setValue(csharp);
