@@ -1,7 +1,7 @@
 /* http://phuocle.net */
 function onViewFetchXMLClick() {
     var webresourceurl = "/WebResources/pl_html/ViewFetchXML.html";
-    var dialogwindow = new Mscrm.CrmDialog(Mscrm.CrmUri.create(webresourceurl), window, 800, 654);
+    var dialogwindow = new Mscrm.CrmDialog(Mscrm.CrmUri.create(webresourceurl), window, 800, 596);
     dialogwindow.setCallbackReference(function (result) {
     });
     if (localStorage) {
@@ -53,7 +53,7 @@ function onViewFetchXMLJsLoad() {
                 var operator = arr[1].substring(1, arr[1].length - 2);
                 var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
+                codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += '"' + space + "<condition attribute='" + name + "' operator='" + operator + "' value='" + '", ' + codeValue + ', "' + "'" + '/>",\n';
             }
@@ -66,7 +66,7 @@ function onViewFetchXMLJsLoad() {
             if (arr.length === 1) {
                 var value = arr[0].substring(1, arr[0].length - 1);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
+                codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += '"' + space + '<value>", ' + codeValue + ',"</value>",\n';
             }
@@ -120,7 +120,7 @@ function onViewFetchXMLCSharpLoad() {
                 var operator = arr[1].substring(1, arr[1].length - 2);
                 var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
+                codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += space + "<condition attribute='" + name + "' operator='" + operator + "' value='{" + codeValue + "}'/>\n";
             }
@@ -133,7 +133,7 @@ function onViewFetchXMLCSharpLoad() {
             if (arr.length === 1) {
                 var value = arr[0].substring(1, arr[0].length - 1);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name + "/*" + fetchData.value + "*/";
+                codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += space + '<value>{' + codeValue + '}</value>,\n';
             }

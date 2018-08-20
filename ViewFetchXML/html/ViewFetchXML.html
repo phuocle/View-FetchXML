@@ -13,9 +13,8 @@
     <script src="../pl_script/ViewFetchXML.js"></script>
     <script src="../pl_script/clipboard.min.js"></script>
 </head>
-<body>
-    <div id="h2">View FetchXML by <a href="http://phuocle.net" target="_blank">PhuocLe</a></div>
-
+<body style="overflow-x:hidden;overflow-y:hidden">
+    <div id="h2"></div>
     <div class="tab">
         <a href="javascript:void(0)" class="tablinks active" onclick="openTab(event, 'FetchXML')">FetchXML</a>
         <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Javascript')">Javascript</a>
@@ -41,6 +40,9 @@
         <button class="copyFetchXML">Copy FetchXML</button>
         <button class="copyJavascript" style="display:none;">Copy Javascript</button>
         <button class="copyCSharp" style="display:none;">Copy CSharp</button>
+    </div>
+    <div style="float:right;font-size:small;margin-top: -25px;padding-right: 5px;">
+        <a href="https://github.com/phuocle/View-FetchXML" target="_blank">View FetchXML</a> by <a href="http://phuocle.net" target="_blank">PhuocLe</a>
     </div>
     <script type="text/javascript">
         onViewFetchXMLLoad();
