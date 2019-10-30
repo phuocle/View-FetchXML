@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewFetchXML", "ViewFetchXML\ViewFetchXML.csproj", "{68670149-40FE-4EA9-A624-572B2C595F69}"
 EndProject
@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{5FAB8B
 		..\Images\03.png = ..\Images\03.png
 		..\Images\04.png = ..\Images\04.png
 		Images\demo.gif = Images\demo.gif
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutions", "Solutions", "{C461DFEF-1A68-4906-82FA-16B96A0C10C9}"
@@ -37,5 +38,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77E045AC-4899-457E-8C61-58EBFB7FE5DF}
 	EndGlobalSection
 EndGlobal
