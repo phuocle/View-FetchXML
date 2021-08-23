@@ -54,7 +54,6 @@
     <Content Include="script\codemirror_mode_xml.js" />
     <Content Include="script\ViewFetchXML.js" />
     <Content Include="script\vkbeautify.js" />
-    <Content Include="Web.config" />
     <Content Include="test\test1.js" />
   </ItemGroup>
   <ItemGroup>
@@ -70,12 +69,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <PropertyGroup>
