@@ -1,4 +1,4 @@
-/* http://phuocle.net */
+/* https://phuocle.net */
 function onViewFetchXMLClick() {
     var webresourceurl = "/WebResources/pl_html/ViewFetchXML.html";
     var dialogwindow = new Mscrm.CrmDialog(Mscrm.CrmUri.create(webresourceurl), window, 800, 596);
@@ -9,6 +9,21 @@ function onViewFetchXMLClick() {
         var fetchXml = advFind.get_fetchXml();
         fetchXml = fetchXml.replace(/&#37;/g, "%");
         localStorage.setItem('CurrentFetchXml', fetchXml);
+        var filterFields = _mainWindow.$.find(".ms-crm-AdvFind-FilterField");
+        if (filterFields !== null && filterFields !== undefined && filterFields.length > 0) {
+            var arr = [];
+            for (var i=0; i<filterFields.length; i++) {
+                var field = filterFields[i];
+                _mainWindow.$(field).find("optgroup").children().each(function (index, item) {
+                    var optionsxml = _mainWindow.$(item).attr("optionsxml");
+                    var value = _mainWindow.$(item).attr("value");
+                    if (value !== undefined && optionsxml !== undefined) {
+                        arr.push({ value: value + (i===0?"":(i+1).toString()), optionsxml });
+                    }
+                });
+            }
+            sessionStorage.setItem("advFindFilterFields", JSON.stringify(arr));
+        }
     }
     dialogwindow.show();
 }
@@ -83,7 +98,8 @@ function onViewFetchXMLJsLoad() {
     if (data.length > 0) {
         declare = "\tvar fetchData = {\r\n";
         for (var i = 0; i < data.length; i++) {
-            declare += "\t\t" + data[i].name + ": " + '"' + data[i].value + '",\r\n'
+            var comment = getOptionSetComment(data[i].name, data[i].value);
+            declare += "\t\t" + data[i].name + ": " + '"' + data[i].value + '"' + (comment.length > 0 ? " /* " + comment + " */": "") +',\r\n'
         }
         declare = declare.substring(0, declare.length - ",\r\n".length);
         declare += "\n";
@@ -94,6 +110,26 @@ function onViewFetchXMLJsLoad() {
     editor.setValue(js);
 }
 
+function getOptionSetComment(field, value) {
+    try {
+        var comment = '';
+        var json = sessionStorage.getItem("advFindFilterFields");
+        if (json === null || json === undefined) return comment;
+        var arr = JSON.parse(json);
+        for (var i = 0; i < arr.length; i++) {
+            if (field === arr[i].value) {
+                var optionsxml = arr[i].optionsxml.replaceAll('\"', '"').replaceAll('"', "'");
+                optionsxml = optionsxml.substring(optionsxml.indexOf(`<option value='${value}'`));
+                optionsxml = optionsxml.substring(`<option value='${value}'`.length + 1);
+                return optionsxml.substring(0, optionsxml.indexOf(`</option>`));
+            }
+        }
+        return comment
+    }
+    catch {
+        return '';
+    }
+}
 
 function onViewFetchXMLCSharpLoad() {
     var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlCsharp"), {
@@ -151,7 +187,8 @@ function onViewFetchXMLCSharpLoad() {
     if (data.length > 0) {
         declare = "\tvar fetchData = new {\r\n";
         for (var i = 0; i < data.length; i++) {
-            declare += "\t\t" + data[i].name + " = " + '"' + data[i].value + '",\r\n'
+            var comment = getOptionSetComment(data[i].name, data[i].value);
+            declare += "\t\t" + data[i].name + " = " + '"' + data[i].value + '"' + (comment.length > 0 ? " /* " + comment + " */" : "") + ',\r\n'
         }
         declare = declare.substring(0, declare.length - ",\r\n".length);
         declare += "\n";
