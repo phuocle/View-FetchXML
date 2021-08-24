@@ -19,6 +19,7 @@
         <a href="javascript:void(0)" class="tablinks active" onclick="openTab(event, 'FetchXML')">FetchXML</a>
         <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Javascript')">Javascript</a>
         <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'CSharp')">CSharp</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApi')">WebApi</a>
     </div>
 
     <div id="FetchXML" class="tabcontent" style="display:block;">
@@ -36,10 +37,16 @@
             <textarea id="fetchXmlCsharp" name="fetchXmlCsharp"></textarea><br />
         </form>
     </div>
+    <div id="WebApi" class="tabcontent" style="display:block;">
+        <form>
+            <textarea id="fetchXmlWebApi" name="fetchXmlWebApi"></textarea><br />
+        </form>
+    </div>
     <div class="button">
         <button class="copyFetchXML">Copy FetchXML</button>
         <button class="copyJavascript" style="display:none;">Copy Javascript</button>
         <button class="copyCSharp" style="display:none;">Copy CSharp</button>
+        <button class="copyWebApi" style="display:none;">Copy WebApi</button>
     </div>
     <div style="float:right;font-size:small;margin-top: -25px;padding-right: 5px;">
         <a href="https://github.com/phuocle/View-FetchXML" target="_blank">View FetchXML 1.4</a> by <a href="https://phuocle.net" target="_blank">PhuocLe</a>
@@ -48,13 +55,16 @@
         onViewFetchXMLLoad();
         onViewFetchXMLJsLoad();
         onViewFetchXMLCSharpLoad();
+        onViewFetchXMLWebApiLoad();
 
         initClipboard_FetchXML();
         initClipboard_Js();
         initClipboard_CSharp();
+        initClipboard_WebApi();
 
         document.getElementById("Javascript").style.display = "none";
         document.getElementById("CSharp").style.display = "none";
+        document.getElementById("WebApi").style.display = "none";
     </script>
 </body>
 </html>

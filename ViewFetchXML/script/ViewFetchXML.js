@@ -68,7 +68,7 @@ function onViewFetchXMLJsLoad() {
                 var operator = arr[1].substring(1, arr[1].length - 2);
                 var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name;
+                var codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += space + "<condition attribute='" + name + "' operator='" + operator + "' value='${" +  codeValue + "}'/>\n";
             }
@@ -81,7 +81,7 @@ function onViewFetchXMLJsLoad() {
             if (arr.length === 1) {
                 var value = arr[0].substring(1, arr[0].length - 1);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name;
+                var codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += space + '<value>${' + codeValue + '}</value>\n';
             }
@@ -156,7 +156,7 @@ function onViewFetchXMLCSharpLoad() {
                 var operator = arr[1].substring(1, arr[1].length - 2);
                 var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name;
+                var codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += space + "<condition attribute='" + name + "' operator='" + operator + "' value='{" + codeValue + "}'/>\n";
             }
@@ -169,7 +169,7 @@ function onViewFetchXMLCSharpLoad() {
             if (arr.length === 1) {
                 var value = arr[0].substring(1, arr[0].length - 1);
                 var fetchData = getFetchData(data, name, value);
-                codeValue = "fetchData." + fetchData.name;
+                var codeValue = "fetchData." + fetchData.name;
                 data.push({ name: fetchData.name, value: fetchData.value });
                 fetch += space + '<value>{' + codeValue + '}</value>,\n';
             }
@@ -199,6 +199,64 @@ function onViewFetchXMLCSharpLoad() {
     editor.setValue(csharp);
 }
 
+function onViewFetchXMLWebApiLoad() {
+    var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlWebApi"), {
+        mode: "javascript",
+        height: "400px",
+        lineNumbers: false,
+        readOnly: true
+    });
+    var fetchXml = localStorage.getItem("CurrentFetchXml");
+    if (fetchXml.length == 0) return "ERROR";
+    fetchXml = fetchXml.replace(/"/g, "'");
+    var lines = vkbeautify.xml(fetchXml, 2).split('\n');
+    var data = [];
+    var name = "";
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        if (line.trim().startsWith("<condition")) {
+            var pattern = /('(.*?)' |'(.*?)'\/>)/g;
+            var arr = line.match(new RegExp(pattern));
+            name = arr[0].substring(1, arr[0].length - 2);
+            if (arr.length === 3 || arr.length === 5) {
+                var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
+                var fetchData = getFetchData(data, name, value);
+                data.push({ name: fetchData.name, value: fetchData.value });
+            }
+        }
+        else if (line.trim().startsWith("<value")) {
+            var pattern = />.*</g;
+            var arr = line.match(new RegExp(pattern));
+            if (arr.length === 1) {
+                var value = arr[0].substring(1, arr[0].length - 1);
+                var fetchData = getFetchData(data, name, value);
+                data.push({ name: fetchData.name, value: fetchData.value });
+            }
+        }
+    }
+
+    var copied = convertFetchXmlToWebApi();
+
+    var declare = ""
+    if (data.length > 0) {
+        declare = "\tvar fetchData = {\r\n";
+        for (var i = 0; i < data.length; i++) {
+            var comment = getOptionSetComment(data[i].name, data[i].value);
+            declare += "\t\t" + data[i].name + ": " + '"' + data[i].value + '"' + (comment.length > 0 ? " /* " + comment + " */" : "") + ',\r\n'
+        }
+        declare = declare.substring(0, declare.length - ",\r\n".length);
+        declare += "\n";
+        declare += "\t};\r\n";
+    }
+    var webApi = declare + copied;
+    localStorage.setItem("webapi", webApi);
+    editor.setValue(webApi);
+}
+
+function convertFetchXmlToWebApi() {
+    return "AAAA";
+
+}
 function initClipboard_FetchXML() {
     var clipboard = new Clipboard('.copyFetchXML', {
         text: function () {
@@ -232,6 +290,18 @@ function initClipboard_CSharp() {
     });
     clipboard.on('success', function (e) {
         alert("CSharp copied");
+    });
+}
+
+function initClipboard_WebApi() {
+    var clipboard = new Clipboard('.copyWebApi', {
+        text: function () {
+            var fetchXml = localStorage.getItem("webapi");
+            return fetchXml;
+        }
+    });
+    clipboard.on('success', function (e) {
+        alert("WebApi copied");
     });
 }
 
