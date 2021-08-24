@@ -1,4 +1,5 @@
 /* https://phuocle.net */
+//@ts-check
 function onViewFetchXMLClick() {
     var webresourceurl = "/WebResources/pl_html/ViewFetchXML.html";
     var dialogwindow = new Mscrm.CrmDialog(Mscrm.CrmUri.create(webresourceurl), window, 800, 596);
@@ -9,21 +10,42 @@ function onViewFetchXMLClick() {
         var fetchXml = advFind.get_fetchXml();
         fetchXml = fetchXml.replace(/&#37;/g, "%");
         localStorage.setItem('CurrentFetchXml', fetchXml);
+    }
+    if (sessionStorage) {
         var filterFields = _mainWindow.$.find(".ms-crm-AdvFind-FilterField");
         if (filterFields !== null && filterFields !== undefined && filterFields.length > 0) {
             var arr = [];
-            for (var i=0; i<filterFields.length; i++) {
+            for (var i = 0; i < filterFields.length; i++) {
                 var field = filterFields[i];
                 _mainWindow.$(field).find("optgroup").children().each(function (index, item) {
                     var optionsxml = _mainWindow.$(item).attr("optionsxml");
                     var value = _mainWindow.$(item).attr("value");
                     if (value !== undefined && optionsxml !== undefined) {
-                        arr.push({ value: value + (i===0?"":(i+1).toString()), optionsxml });
+                        arr.push({ value: value + (i === 0 ? "" : (i + 1).toString()), optionsxml });
                     }
                 });
             }
-            sessionStorage.setItem("advFindFilterFields", JSON.stringify(arr));
+            sessionStorage.setItem("View-FetchXML-advFindFilterFields", JSON.stringify(arr));
         }
+        var clientUrl = Xrm?.Utility?.getGlobalContext()?.getClientUrl();
+        if (clientUrl === null) {
+            clientUrl = Xrm?.Page?.context?.getClientUrl();
+        }
+        if (clientUrl !== null) {
+            sessionStorage.setItem("View-FetchXML-clientUrl", clientUrl);
+        }
+        var version = Xrm?.Utility?.getGlobalContext()?.getVersion();
+        if (version === null) {
+            version = "8.2";
+        }
+        var versionArray = version.split(".");
+        if (versionArray.length >= 2) {
+            version = versionArray[0] + "." + versionArray[1];
+        }
+        else {
+            version = "8.2";
+        }
+        sessionStorage.setItem("View-FetchXML-version", version);
     }
     dialogwindow.show();
 }
@@ -113,7 +135,7 @@ function onViewFetchXMLJsLoad() {
 function getOptionSetComment(field, value) {
     try {
         var comment = '';
-        var json = sessionStorage.getItem("advFindFilterFields");
+        var json = sessionStorage.getItem("View-FetchXML-advFindFilterFields");
         if (json === null || json === undefined) return comment;
         var arr = JSON.parse(json);
         for (var i = 0; i < arr.length; i++) {
@@ -209,7 +231,7 @@ function onViewFetchXMLWebApiCsLoad() {
     editor.setValue('');
 }
 
-function onViewFetchXMLWebApiJsLoad() {
+function onViewFetchXMLWebApiJsLoad(output) {
     var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlWebApiJs"), {
         mode: "javascript",
         height: "400px",
@@ -245,7 +267,7 @@ function onViewFetchXMLWebApiJsLoad() {
         }
     }
 
-    var copied = convertFetchXmlToWebApi();
+    var copied = convertFetchXmlToWebApiJs();
 
     var declare = ""
     if (data.length > 0) {
@@ -263,9 +285,12 @@ function onViewFetchXMLWebApiJsLoad() {
     editor.setValue(webApi);
 }
 
-function convertFetchXmlToWebApi() {
-    return "AAAA";
-
+function convertFetchXmlToWebApiJs() {
+    var url = "";
+    url += "\tvar options = `?\r\n";
+    url += webApi.WebApiJs.substring(webApi.WebApiJs.indexOf('?$') + 1);
+    url += "\r\n`;\r\n"
+    return url;
 }
 function initClipboard_FetchXML() {
     var clipboard = new Clipboard('.copyFetchXML', {
@@ -351,6 +376,10 @@ var loaded = {
     WebApiJs: false,
     WebApiCs: false
 };
+var webApi = {
+    WebApiJs: '',
+    WebApiCs: ''
+};
 
 function openTab(evt, name) {
     var i, tabcontent, tablinks;
@@ -375,11 +404,53 @@ function openTab(evt, name) {
         loaded.Cs = true;
     }
     else if (name === 'WebApiJs' && !loaded.WebApiJs) {
-        onViewFetchXMLWebApiJsLoad();
         loaded.WebApiJs = true;
+        if (webApi.WebApiJs === '' && webApi.WebApiCs === '') {
+            var Url = `${sessionStorage.getItem("View-FetchXML-clientUrl")}/api/data/v${sessionStorage.getItem("View-FetchXML-version")}`;
+            var FetchXml = localStorage.getItem("CurrentFetchXml").replaceAll('\"', "'");
+            callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
+                webApi.WebApiJs = output.WebApiJs;
+                webApi.WebApiCs = output.WebApiCs;
+                onViewFetchXMLWebApiJsLoad();
+            });
+        }
+        else {
+            onViewFetchXMLWebApiJsLoad();
+        }
     }
     else if (name === 'WebApiCs' && !loaded.WebApiCs) {
-        onViewFetchXMLWebApiCsLoad();
         loaded.WebApiCs = true;
+        if (webApi.WebApiJs === '' && webApi.WebApiCs === '') {
+            var Url = `${sessionStorage.getItem("View-FetchXML-clientUrl")}/api/data/v${sessionStorage.getItem("View-FetchXML-version")}`;
+            var FetchXml = localStorage.getItem("CurrentFetchXml").replaceAll('\"', "'");
+            callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
+                webApi.WebApiJs = output.WebApiJs;
+                webApi.WebApiCs = output.WebApiCs;
+                onViewFetchXMLWebApiCsLoad();
+            });
+        }
+        else {
+            onViewFetchXMLWebApiCsLoad();
+        }
     }
+}
+
+function callAction(f, i, callback) {
+    var url = `${sessionStorage.getItem("View-FetchXML-clientUrl")}/api/data/v${sessionStorage.getItem("View-FetchXML-version")}/pl_ViewFetchXML`;
+    var req = new XMLHttpRequest();
+    req.open("POST", url, true);
+    req.setRequestHeader("OData-MaxVersion", "4.0");
+    req.setRequestHeader("OData-Version", "4.0");
+    req.setRequestHeader("Accept", "application/json");
+    req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+    req.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            req.onreadystatechange = null;
+            if (this.status === 200) {
+                var output = JSON.parse(JSON.parse(this.response).output);
+                callback(output);
+            }
+        }
+    };
+    req.send(JSON.stringify({ function: f, input: JSON.stringify(i) }));
 }

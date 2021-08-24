@@ -1,5 +1,6 @@
 ﻿using MarkMpn.FetchXmlToWebAPI;
 using Microsoft.Xrm.Sdk;
+using System;
 using ViewFetchXML.Shared;
 
 namespace ViewFetchXML.CustomAction.Actions
@@ -22,8 +23,20 @@ namespace ViewFetchXML.CustomAction.Actions
         {
             var input = SimpleJson.DeserializeObject<InputConvertFetchXmlToWebAPI>(json);
             var output = new OutputConvertFetchXmlToWebAPI { WebApiJs = string.Empty, WebApiCs = string.Empty };
-            var converter = new FetchXmlToWebAPIConverter(new MetadataProvider(serviceAdmin), input.Url);
-            output.WebApiJs = converter.ConvertFetchXmlToWebAPI(input.FetchXml);
+            try
+            {
+                var converter = new FetchXmlToWebAPIConverter(new MetadataProvider(serviceAdmin), input.Url);
+                output.WebApiJs = converter.ConvertFetchXmlToWebAPI(input.FetchXml);
+            }
+            catch (NotSupportedException e)
+            {
+                output.WebApiJs = e.Message;
+                output.WebApiCs = e.Message;
+            }
+            catch (Exception e2)
+            {
+                output.WebApiJs = e2.Message;
+            }
             return SimpleJson.SerializeObject(output);
         }
     }

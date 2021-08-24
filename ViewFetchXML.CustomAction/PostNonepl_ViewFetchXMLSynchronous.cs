@@ -32,15 +32,15 @@ namespace ViewFetchXML.CustomAction
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
-            var service = serviceFactory.CreateOrganizationService(context.UserId);
+            var service = serviceFactory.CreateOrganizationService(context.InitiatingUserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (context.PrimaryEntityName.ToLower() != "none".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals none");
             if (context.MessageName.ToLower() != "pl_ViewFetchXML".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals pl_ViewFetchXML");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            tracing.DebugMessage("Begin Custom Action: ViewFetchXML.CustomAction.PostNonepl_ViewFetchXMLSynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugMessage("Begin Custom Action: ViewFetchXML.CustomAction.PostNonepl_ViewFetchXMLSynchronous");
+            //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, serviceAdmin, service, tracing);
 
@@ -48,7 +48,7 @@ namespace ViewFetchXML.CustomAction
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugMessage("End Custom Action: ViewFetchXML.CustomAction.PostNonepl_ViewFetchXMLSynchronous");
+            //tracing.DebugMessage("End Custom Action: ViewFetchXML.CustomAction.PostNonepl_ViewFetchXMLSynchronous");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
@@ -58,9 +58,9 @@ namespace ViewFetchXML.CustomAction
             var function = (string)context.InputParameters?["function"];
             var input = (string)context.InputParameters?["input"];
             var output = string.Empty;
-            switch (input)
+            switch (function)
             {
-                case "ConvertFetchXmlToWebAPI":
+                case "ConvertFetchXmlToWebApi":
                     output = ConvertFetchXmlToWebAPI.Process(serviceAdmin, service, tracing, input);
                     break;
                 default:
