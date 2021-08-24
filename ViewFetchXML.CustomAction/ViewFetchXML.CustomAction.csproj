@@ -46,6 +46,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -53,6 +54,8 @@
     <None Include="packages.config" />
     <None Include="ViewFetchXML.CustomAction.snk" />
     <None Include="deploy.debug.bat" />
+    <Compile Include="Actions\ConvertFetchXmlToWebAPI.cs" />
+    <Compile Include="MetadataProvider.cs" />
     <Compile Include="PostNonepl_ViewFetchXMLSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -60,6 +63,7 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="..\ViewFetchXML.Shared\ViewFetchXML.Shared.projitems" Label="Shared" Condition="Exists('..\ViewFetchXML.Shared\ViewFetchXML.Shared.projitems')" />
+  <Import Project="..\..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems" Label="Shared" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>

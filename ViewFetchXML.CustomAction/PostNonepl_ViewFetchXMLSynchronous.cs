@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using ViewFetchXML.CustomAction.Actions;
 using ViewFetchXML.Shared;
 
 namespace ViewFetchXML.CustomAction
@@ -30,6 +31,7 @@ namespace ViewFetchXML.CustomAction
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
@@ -40,7 +42,7 @@ namespace ViewFetchXML.CustomAction
             tracing.DebugMessage("Begin Custom Action: ViewFetchXML.CustomAction.PostNonepl_ViewFetchXMLSynchronous");
             tracing.DebugContext(context);
 
-            var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
+            var outputs = ExecuteCustomAction(context, serviceFactory, serviceAdmin, service, tracing);
 
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
@@ -49,7 +51,7 @@ namespace ViewFetchXML.CustomAction
             tracing.DebugMessage("End Custom Action: ViewFetchXML.CustomAction.PostNonepl_ViewFetchXMLSynchronous");
         }
 
-        private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
+        private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
@@ -58,7 +60,8 @@ namespace ViewFetchXML.CustomAction
             var output = string.Empty;
             switch (input)
             {
-                case "A":
+                case "ConvertFetchXmlToWebAPI":
+                    output = ConvertFetchXmlToWebAPI.Process(serviceAdmin, service, tracing, input);
                     break;
                 default:
                     output = string.Empty;

@@ -17,9 +17,10 @@
     <div id="h2"></div>
     <div class="tab">
         <a href="javascript:void(0)" class="tablinks active" onclick="openTab(event, 'FetchXML')">FetchXML</a>
-        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Javascript')">Javascript</a>
-        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'CSharp')">CSharp</a>
-        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApi')">WebApi</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Javascript')">FetchXML JS</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'CSharp')">FetchXML CS</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApiJs')">WebApi JS</a>
+        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApiCs')">WebApi CS</a>
     </div>
 
     <div id="FetchXML" class="tabcontent" style="display:block;">
@@ -37,34 +38,42 @@
             <textarea id="fetchXmlCsharp" name="fetchXmlCsharp"></textarea><br />
         </form>
     </div>
-    <div id="WebApi" class="tabcontent" style="display:block;">
+    <div id="WebApiJs" class="tabcontent" style="display:block;">
         <form>
-            <textarea id="fetchXmlWebApi" name="fetchXmlWebApi"></textarea><br />
+            <textarea id="fetchXmlWebApiJs" name="fetchXmlWebApiJs"></textarea><br />
+        </form>
+    </div>
+    <div id="WebApiCs" class="tabcontent" style="display:block;">
+        <form>
+            <textarea id="fetchXmlWebApiCs" name="fetchXmlWebApiCs"></textarea><br />
         </form>
     </div>
     <div class="button">
         <button class="copyFetchXML">Copy FetchXML</button>
         <button class="copyJavascript" style="display:none;">Copy Javascript</button>
         <button class="copyCSharp" style="display:none;">Copy CSharp</button>
-        <button class="copyWebApi" style="display:none;">Copy WebApi</button>
+        <button class="copyWebApiJs" style="display:none;">Copy WebApiJs</button>
+        <button class="copyWebApiCs" style="display:none;">Copy WebApiCs</button>
     </div>
     <div style="float:right;font-size:small;margin-top: -25px;padding-right: 5px;">
         <a href="https://github.com/phuocle/View-FetchXML" target="_blank">View FetchXML 1.4</a> by <a href="https://phuocle.net" target="_blank">PhuocLe</a>
     </div>
     <script type="text/javascript">
         onViewFetchXMLLoad();
-        onViewFetchXMLJsLoad();
-        onViewFetchXMLCSharpLoad();
-        onViewFetchXMLWebApiLoad();
+        //onViewFetchXMLJsLoad();
+        //onViewFetchXMLCSharpLoad();
+        //onViewFetchXMLWebApiJsLoad();
 
         initClipboard_FetchXML();
         initClipboard_Js();
         initClipboard_CSharp();
-        initClipboard_WebApi();
+        initClipboard_WebApiJs();
+        initClipboard_WebApiCs();
 
         document.getElementById("Javascript").style.display = "none";
         document.getElementById("CSharp").style.display = "none";
-        document.getElementById("WebApi").style.display = "none";
+        document.getElementById("WebApiJs").style.display = "none";
+        document.getElementById("WebApiCs").style.display = "none";
     </script>
 </body>
 </html>

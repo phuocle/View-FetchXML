@@ -20,9 +20,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewFetchXML.Console", "Vie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewFetchXML.WebResource", "ViewFetchXML.WebResource\ViewFetchXML.WebResource.csproj", "{973571C0-8676-4256-B192-EBDA2F20B851}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.FetchXmlToWebAPI", "..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.shproj", "{543E6D79-2913-4B00-AAAC-5661F6ADB1A5}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{10ec4fef-c2e3-441b-9c67-54dc6c391017}*SharedItemsImports = 4
 		ViewFetchXML.Shared\ViewFetchXML.Shared.projitems*{10ec4fef-c2e3-441b-9c67-54dc6c391017}*SharedItemsImports = 4
+		..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{543e6d79-2913-4b00-aaac-5661f6adb1a5}*SharedItemsImports = 13
+		..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{651513f6-90fe-45cd-8a88-3296618939e5}*SharedItemsImports = 4
 		ViewFetchXML.Shared\ViewFetchXML.Shared.projitems*{651513f6-90fe-45cd-8a88-3296618939e5}*SharedItemsImports = 4
 		ViewFetchXML.Shared\ViewFetchXML.Shared.projitems*{ba1b56bf-a1c0-42b9-9b65-9f456fb8d12f}*SharedItemsImports = 13
 	EndGlobalSection

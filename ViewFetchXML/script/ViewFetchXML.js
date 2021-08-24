@@ -199,8 +199,18 @@ function onViewFetchXMLCSharpLoad() {
     editor.setValue(csharp);
 }
 
-function onViewFetchXMLWebApiLoad() {
-    var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlWebApi"), {
+function onViewFetchXMLWebApiCsLoad() {
+    var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlWebApiCs"), {
+        mode: "javascript",
+        height: "400px",
+        lineNumbers: false,
+        readOnly: true
+    });
+    editor.setValue('');
+}
+
+function onViewFetchXMLWebApiJsLoad() {
+    var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlWebApiJs"), {
         mode: "javascript",
         height: "400px",
         lineNumbers: false,
@@ -249,7 +259,7 @@ function onViewFetchXMLWebApiLoad() {
         declare += "\t};\r\n";
     }
     var webApi = declare + copied;
-    localStorage.setItem("webapi", webApi);
+    localStorage.setItem("webapijs", webApi);
     editor.setValue(webApi);
 }
 
@@ -293,15 +303,27 @@ function initClipboard_CSharp() {
     });
 }
 
-function initClipboard_WebApi() {
-    var clipboard = new Clipboard('.copyWebApi', {
+function initClipboard_WebApiJs() {
+    var clipboard = new Clipboard('.copyWebApiJs', {
         text: function () {
-            var fetchXml = localStorage.getItem("webapi");
+            var fetchXml = localStorage.getItem("webapijs");
             return fetchXml;
         }
     });
     clipboard.on('success', function (e) {
-        alert("WebApi copied");
+        alert("WebApiJs copied");
+    });
+}
+
+function initClipboard_WebApiCs() {
+    var clipboard = new Clipboard('.copyWebApiCs', {
+        text: function () {
+            var fetchXml = localStorage.getItem("webapics");
+            return fetchXml;
+        }
+    });
+    clipboard.on('success', function (e) {
+        alert("WebApiCs copied");
     });
 }
 
@@ -323,6 +345,13 @@ function getFetchData(data, name, value) {
     return fetchData;
 }
 
+var loaded = {
+    Js: false,
+    Cs: false,
+    WebApiJs: false,
+    WebApiCs: false
+};
+
 function openTab(evt, name) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -337,4 +366,20 @@ function openTab(evt, name) {
     document.getElementById(name).style.display = "block";
     document.getElementsByClassName("copy" + name)[0].style.display = "block";
     evt.currentTarget.className += " active";
+    if (name === 'Javascript' && !loaded.Js) {
+        onViewFetchXMLJsLoad();
+        loaded.Js = true;
+    }
+    else if (name === 'CSharp' && !loaded.Cs) {
+        onViewFetchXMLCSharpLoad();
+        loaded.Cs = true;
+    }
+    else if (name === 'WebApiJs' && !loaded.WebApiJs) {
+        onViewFetchXMLWebApiJsLoad();
+        loaded.WebApiJs = true;
+    }
+    else if (name === 'WebApiCs' && !loaded.WebApiCs) {
+        onViewFetchXMLWebApiCsLoad();
+        loaded.WebApiCs = true;
+    }
 }
