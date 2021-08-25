@@ -120,6 +120,9 @@
     <Compile Include="..\ViewFetchXML.CustomAction\Actions\ConvertFetchXmlToWebAPI.cs">
       <Link>Actions\ConvertFetchXmlToWebAPI.cs</Link>
     </Compile>
+    <Compile Include="..\ViewFetchXML.CustomAction\Actions\ReturnObjectFetchXMLToJs.cs">
+      <Link>Actions\ReturnObjectFetchXMLToJs.cs</Link>
+    </Compile>
     <Compile Include="..\ViewFetchXML.CustomAction\MetadataProvider.cs">
       <Link>Links\MetadataProvider.cs</Link>
     </Compile>

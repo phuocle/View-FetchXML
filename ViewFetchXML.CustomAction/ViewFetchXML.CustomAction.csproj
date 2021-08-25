@@ -55,6 +55,7 @@
     <None Include="ViewFetchXML.CustomAction.snk" />
     <None Include="deploy.debug.bat" />
     <Compile Include="Actions\ConvertFetchXmlToWebAPI.cs" />
+    <Compile Include="Actions\ReturnObjectFetchXMLToJs.cs" />
     <Compile Include="MetadataProvider.cs" />
     <Compile Include="PostNonepl_ViewFetchXMLSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

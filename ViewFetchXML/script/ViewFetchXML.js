@@ -65,7 +65,7 @@ function onViewFetchXMLLoad() {
     editor.setValue(fetch);
 }
 
-function onViewFetchXMLJsLoad() {
+function onViewFetchXMLJsLoad(comments) {
     var editor = CodeMirror.fromTextArea(document.getElementById("fetchXmlJs"), {
         mode: "javascript",
         height: "400px",
@@ -115,7 +115,7 @@ function onViewFetchXMLJsLoad() {
     }
     var copied = "\tvar fetchXml = `\r\n";
     copied += fetch.substring(0, fetch.length - 1);
-    copied += "\r\n`;";
+    copied += "\r\n`;\r\n";
     var declare = "";
     if (data.length > 0) {
         declare = "\tvar fetchData = {\r\n";
@@ -128,6 +128,14 @@ function onViewFetchXMLJsLoad() {
         declare += "\t};\r\n";
     }
     var js = declare + copied;
+    js += "\t/*\r\n";
+    js += "\t{\r\n";
+    for (var i = 0; i < comments.length; i++) {
+        js += "\t\t" + comments[i] + '\r\n';
+    }
+    js += "\t}\r\n";
+    js += "\t*/\r\n";
+
     localStorage.setItem("js", js);
     editor.setValue(js);
 }
@@ -389,6 +397,9 @@ var webApi = {
 
 function openTab(evt, name) {
     var i, tabcontent, tablinks;
+    var Url = `${sessionStorage.getItem("View-FetchXML-clientUrl")}/api/data/v${sessionStorage.getItem("View-FetchXML-version")}`;
+    var FetchXml = localStorage.getItem("CurrentFetchXml").replaceAll('\"', "'");
+
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
@@ -402,8 +413,10 @@ function openTab(evt, name) {
     document.getElementsByClassName("copy" + name)[0].style.display = "block";
     evt.currentTarget.className += " active";
     if (name === 'Javascript' && !loaded.Js) {
-        onViewFetchXMLJsLoad();
         loaded.Js = true;
+        callAction("ReturnObjectFetchXMLToJs", { FetchXml }, function (output) {
+            onViewFetchXMLJsLoad(output.Lines);
+        });
     }
     else if (name === 'CSharp' && !loaded.Cs) {
         onViewFetchXMLCSharpLoad();
@@ -412,8 +425,6 @@ function openTab(evt, name) {
     else if (name === 'WebApiJs' && !loaded.WebApiJs) {
         loaded.WebApiJs = true;
         if (webApi.WebApiJs === '' && webApi.WebApiCs === '') {
-            var Url = `${sessionStorage.getItem("View-FetchXML-clientUrl")}/api/data/v${sessionStorage.getItem("View-FetchXML-version")}`;
-            var FetchXml = localStorage.getItem("CurrentFetchXml").replaceAll('\"', "'");
             callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
                 webApi.WebApiJs = output.WebApiJs;
                 webApi.WebApiCs = output.WebApiCs;
@@ -427,8 +438,6 @@ function openTab(evt, name) {
     else if (name === 'WebApiCs' && !loaded.WebApiCs) {
         loaded.WebApiCs = true;
         if (webApi.WebApiJs === '' && webApi.WebApiCs === '') {
-            var Url = `${sessionStorage.getItem("View-FetchXML-clientUrl")}/api/data/v${sessionStorage.getItem("View-FetchXML-version")}`;
-            var FetchXml = localStorage.getItem("CurrentFetchXml").replaceAll('\"', "'");
             callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
                 webApi.WebApiJs = output.WebApiJs;
                 webApi.WebApiCs = output.WebApiCs;

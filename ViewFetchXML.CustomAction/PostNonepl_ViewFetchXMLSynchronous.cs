@@ -63,6 +63,9 @@ namespace ViewFetchXML.CustomAction
                 case "ConvertFetchXmlToWebApi":
                     output = ConvertFetchXmlToWebAPI.Process(serviceAdmin, service, tracing, input);
                     break;
+                case "ReturnObjectFetchXMLToJs":
+                    output = ReturnObjectFetchXMLToJs.Process(serviceAdmin, service, tracing, input);
+                    break;
                 default:
                     output = string.Empty;
                     break;
