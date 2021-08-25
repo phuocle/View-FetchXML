@@ -16,14 +16,11 @@ namespace ViewFetchXML.Console
         {
             var fetchData = new
             {
-                name = "ABC",
-                industrycode = "3" /* Broadcasting Printing and Publishing */,
-                name2 = "DEF",
-                industrycode2 = "5" /* Building Supply Retail */,
-                donotemail = "1" /* Do Not Allow */
+                accountid = "{60E1C27F-DD03-EC11-B6E5-000D3AA2E9C5}",
+                contactid = "{74E1C27F-DD03-EC11-B6E5-000D3AA2E9C5}"
             };
             var fetchXml = $@"
-<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
   <entity name='account'>
     <attribute name='name'/>
     <attribute name='primarycontactid'/>
@@ -31,19 +28,16 @@ namespace ViewFetchXML.Console
     <attribute name='accountid'/>
     <order attribute='name' descending='false'/>
     <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      <condition attribute='industrycode' operator='eq' value='{fetchData.industrycode}'/>
+      <condition attribute='accountid' operator='eq' value='{fetchData.accountid}'/>
     </filter>
-    <link-entity name='account' from='parentaccountid' to='accountid' link-type='inner' alias='ac'>
-      <filter type='and'>
-        <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
-        <condition attribute='industrycode' operator='eq' value='{fetchData.industrycode2}'/>
-        <condition attribute='donotemail' operator='eq' value='{fetchData.donotemail}'/>
-      </filter>
-    </link-entity>
-    <link-entity name='account' from='accountid' to='parentaccountid' visible='false' link-type='outer' alias='account'>
+    <link-entity name='account' from='accountid' to='parentaccountid' visible='false' link-type='outer' alias='a_57511732b5534cfbbcf2d280f9f8c6f1'>
       <attribute name='accountnumber'/>
       <attribute name='name'/>
+    </link-entity>
+    <link-entity name='contact' from='contactid' to='primarycontactid' link-type='inner' alias='ae'>
+      <filter type='and'>
+        <condition attribute='contactid' operator='eq' value='{fetchData.contactid}'/>
+      </filter>
     </link-entity>
   </entity>
 </fetch>
@@ -56,14 +50,7 @@ namespace ViewFetchXML.Console
             var json = SimpleJson.SerializeObject(input);
             var output = ConvertFetchXmlToWebAPI.Process(AppSettings.Service, null, null, json);
 
-            /*
 
-                        {"WebApiJs":"https://org47503bc8.crm5.dynamics.com/api/data/v9.2\r\n/accounts?$select=name,_primarycontactid_value,telephone1,accountid&$expand=account_parent_account($filter=(name eq 'DEF' and industrycode eq 5 and donotemail eq true)),parentaccountid($select=accountnumber,name)&$filter=(name eq 'ABC' and industrycode eq 3) and (account_parent_account/any(o1:(o1/name eq 'DEF' and o1/industrycode eq 5 and o1/donotemail eq true)))&$orderby=name asc","WebApiCs":""}
-
-
-
-
-            */
             var t = string.Empty;
         }
     }

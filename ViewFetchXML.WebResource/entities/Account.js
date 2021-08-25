@@ -8,14 +8,15 @@ var formAccount = (function () {
 	async function onLoad(executionContext) {
 		form = new WebResource.FormAccount(executionContext);
 
-		var fetchData = {
-			accountid: "{60E1C27F-DD03-EC11-B6E5-000D3AA2E9C5}"
-		};
 		var options = `?
-$select=name,_primarycontactid_value,telephone1,accountid&$expand=parentaccountid($select=accountnumber,name)&$filter=(accountid eq 60e1c27f-dd03-ec11-b6e5-000d3aa2e9c5)&$orderby=name asc
+$select=name,_primarycontactid_value,telephone1,accountid&
+$expand=
+	parentaccountid($select=accountnumber,name),
+	transactioncurrencyid($select=isocurrencycode)&
+$filter=(accountid eq 60e1c27f-dd03-ec11-b6e5-000d3aa2e9c5) and (primarycontactid/contactid eq 74e1c27f-dd03-ec11-b6e5-000d3aa2e9c5) and (transactioncurrencyid/transactioncurrencyid eq f89d2c96-c802-ec11-b6e5-000d3aa2eb72)&
+$orderby=name asc
 `;
-
-
+		debugger;
 
 
 		var response = await Xrm.WebApi.retrieveMultipleRecords("account", options);

@@ -286,11 +286,17 @@ function onViewFetchXMLWebApiJsLoad(output) {
 }
 
 function convertFetchXmlToWebApiJs() {
-    var url = "";
-    url += "\tvar options = `?\r\n";
-    url += webApi.WebApiJs.substring(webApi.WebApiJs.indexOf('?$') + 1);
-    url += "\r\n`;\r\n"
-    return url;
+    var options = ``;
+    options += '\tvar options = `?\r\n';
+    //$select=name,_primarycontactid_value,telephone1,accountid&$expand=parentaccountid($select=accountnumber,name),transactioncurrencyid($select=isocurrencycode)&$filter=(accountid eq 60e1c27f-dd03-ec11-b6e5-000d3aa2e9c5) and (primarycontactid/contactid eq 74e1c27f-dd03-ec11-b6e5-000d3aa2e9c5) and (transactioncurrencyid/transactioncurrencyid eq f89d2c96-c802-ec11-b6e5-000d3aa2eb72)&$orderby=name asc
+    var url = webApi.WebApiJs.substring(webApi.WebApiJs.indexOf('?$') + 1);
+    var array = url.split('$');
+    for (var i = 0; i < array.length; i++) {
+        options += "$" + array[i] + "\r\n";
+    }
+
+    options += '\r\n`;\r\n';
+    return options;
 }
 function initClipboard_FetchXML() {
     var clipboard = new Clipboard('.copyFetchXML', {
