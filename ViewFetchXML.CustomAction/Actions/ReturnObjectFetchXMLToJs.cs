@@ -48,6 +48,8 @@ namespace ViewFetchXML.CustomAction.Actions
 
                     output.Lines.Add("'@odata.etag': string");
 
+                    attributes = attributes.OrderBy(x => x.name);
+
                     foreach (FetchAttributeType attribute in attributes)
                     {
                         var attrMeta = entityMeta.Attributes.SingleOrDefault(x => x.LogicalName == attribute.name);
@@ -85,6 +87,8 @@ namespace ViewFetchXML.CustomAction.Actions
                     .OfType<FetchAttributeType>()
                     .Where(i => i.name != null);
                 var linkEntityMeta = metadata.GetEntity(currentLinkEntity.name);
+
+                linkAttributes = linkAttributes.OrderBy(x => x.name);
 
                 foreach (FetchAttributeType attribute in linkAttributes)
                 {
