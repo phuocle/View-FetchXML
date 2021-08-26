@@ -248,16 +248,18 @@ function onViewFetchXMLWebApiJsLoad(output) {
     });
     var js = '';
     var fetchDatas = JSON.parse(webApi.FetchData);
-    js = "\tvar fetchData = {\r\n";
-    for (var i = 0; i < fetchDatas.length; i++) {
-        var fetchData = fetchDatas[i];
-        var comment = getOptionSetComment(fetchData.Name2, fetchData.Value);
-        if (comment === '' && fetchData.Value2 !== '')
-            comment = fetchData.Value2;
-        js += "\t\t" + fetchData.Name2 + ": " + '`' + fetchData.Value + '`' + (comment.length > 0 ? " /* " + comment + " */" : "") + ',\r\n'
+    if (fetchDatas.length > 0) {
+        js = "\tvar fetchData = {\r\n";
+        for (var i = 0; i < fetchDatas.length; i++) {
+            var fetchData = fetchDatas[i];
+            var comment = getOptionSetComment(fetchData.Name2, fetchData.Value);
+            if (comment === '' && fetchData.Value2 !== '')
+                comment = fetchData.Value2;
+            js += "\t\t" + fetchData.Name2 + ": " + '`' + fetchData.Value + '`' + (comment.length > 0 ? " /* " + comment + " */" : "") + ',\r\n'
+        }
+        js = js.substring(0, js.length - ",\r\n".length);
+        js += "\r\n\t};\r\n";
     }
-    js = js.substring(0, js.length - ",\r\n".length);
-    js += "\t};\r\n";
     js += convertFetchXmlToWebApiJs();
     localStorage.setItem("webapijs", js);
     editor.setValue(js);

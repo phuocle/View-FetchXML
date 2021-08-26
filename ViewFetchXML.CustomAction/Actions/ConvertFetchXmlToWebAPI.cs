@@ -28,30 +28,28 @@ namespace ViewFetchXML.CustomAction.Actions
         public static string Process(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, string json)
         {
             var input = SimpleJson.DeserializeObject<InputConvertFetchXmlToWebAPI>(json);
-            var output = new OutputConvertFetchXmlToWebAPI { };
+            var output = new OutputConvertFetchXmlToWebAPI {
+                Select = string.Empty,
+                Expand = string.Empty,
+                Filter = string.Empty,
+                OrderBy = string.Empty,
+                FetchData = string.Empty
+            };
             try
             {
                 var converter = new FetchXmlToWebAPIConverter(new MetadataProvider(serviceAdmin), input.Url);
                 //output.WebApiJs = converter.ConvertFetchXmlToWebAPI(input.FetchXml);
                 var odata = converter.ConvertFetchXmlToWebAPI(input.FetchXml);
+                if (odata.Select.Count > 0)
+                    output.Select = "$select=" + String.Join(",", odata.Select);
+                if (odata.Expand.Count > 0)
+                    output.Expand = "$expand=" + String.Join(",", odata.Expand.Select(e => $"{e.PropertyName}({e})"));
+                if (odata.Filter.Count > 0)
+                    output.Filter = "$filter=" + String.Join(" and ", odata.Filter);
+                if (odata.OrderBy.Count > 0)
+                    output.OrderBy = "$orderby=" + String.Join(",", odata.OrderBy);
 
-                output.Select = "$select=" + String.Join(",", odata.Select);
-                output.Expand = "$expand=" + String.Join(",", odata.Expand.Select(e => $"{e.PropertyName}({e})"));
-                output.Filter = "$filter=" + String.Join(" and ", odata.Filter);
-                output.OrderBy = "$orderby=" + String.Join(",", odata.OrderBy);
                 output.FetchData = SimpleJson.SerializeObject(odata.FetchData);
-
-                //var filterString = string.Empty;
-                //foreach(var filter in odata.Filter)
-                //{
-                //    if (filter.Conditions.Count == 0) continue;
-                //    foreach(var condition in filter.Conditions)
-                //    {
-                //        var t = string.Empty;
-                //    }
-                //}
-                //output.Filter = filterString;
-
             }
             catch (NotSupportedException e)
             {
