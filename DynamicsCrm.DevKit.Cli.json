@@ -66,19 +66,19 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",
-      "solution": "???",
+      "solution": "ViewFetchXML",
       "rootfolder": "",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "ViewFetchXML",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
-      "solution": "???",
+      "solution": "ViewFetchXML",
       "rootfolder": "",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "ViewFetchXML",
       "type": "Extract",
       "mapfile": ""
     },

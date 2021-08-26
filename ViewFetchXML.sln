@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewFetchXML.WebResource", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MarkMpn.FetchXmlToWebAPI", "..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.shproj", "{543E6D79-2913-4B00-AAAC-5661F6ADB1A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewFetchXML.SolutionPackager", "ViewFetchXML.SolutionPackager\ViewFetchXML.SolutionPackager.csproj", "{071E2FAA-0498-4A04-A2EB-4E2722607E59}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI\MarkMpn.FetchXmlToWebAPI.projitems*{10ec4fef-c2e3-441b-9c67-54dc6c391017}*SharedItemsImports = 4
@@ -52,6 +54,10 @@ Global
 		{973571C0-8676-4256-B192-EBDA2F20B851}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{973571C0-8676-4256-B192-EBDA2F20B851}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{973571C0-8676-4256-B192-EBDA2F20B851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{071E2FAA-0498-4A04-A2EB-4E2722607E59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{071E2FAA-0498-4A04-A2EB-4E2722607E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{071E2FAA-0498-4A04-A2EB-4E2722607E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{071E2FAA-0498-4A04-A2EB-4E2722607E59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
