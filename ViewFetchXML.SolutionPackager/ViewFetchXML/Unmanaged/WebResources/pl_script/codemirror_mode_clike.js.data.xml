@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{6c8abf0b-28ff-e611-80fd-080027ddf084}</WebResourceId>
+  <Name>pl_script/codemirror_mode_clike.js</Name>
+  <DisplayName>pl_script/codemirror_mode_clike.js</DisplayName>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/pl_scriptcodemirror_mode_clikejs6C8ABF0B-28FF-E611-80FD-080027DDF084</FileName>
+</WebResource>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RibbonDiffXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CustomActions>
+    <CustomAction Id="pl.ApplicationRibbon.Button.ViewFetchXML.CustomAction" Location="Mscrm.AdvancedFind.Groups.Debug.Controls._children" Sequence="35">
+      <CommandUIDefinition>
+        <Button Command="pl.ApplicationRibbon.Command.ViewFetchXML" Id="pl.ApplicationRibbon.Button.ViewFetchXML" Image32by32="/_imgs/Ribbon/EditProperties_32.png" Image16by16="/_imgs/Ribbon/EditProperties_16.png" LabelText="$LocLabels:pl.ApplicationRibbon.Button.ViewFetchXML.LabelText" Sequence="35" TemplateAlias="o1" />
+      </CommandUIDefinition>
+    </CustomAction>
+  </CustomActions>
+  <Templates>
+    <RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates>
+  </Templates>
+  <CommandDefinitions>
+    <CommandDefinition Id="pl.ApplicationRibbon.Command.ViewFetchXML">
+      <EnableRules />
+      <DisplayRules />
+      <Actions>
+        <JavaScriptFunction FunctionName="onViewFetchXMLClick" Library="$webresource:pl_script/ViewFetchXML.js" />
+      </Actions>
+    </CommandDefinition>
+  </CommandDefinitions>
+  <RuleDefinitions>
+    <TabDisplayRules />
+    <DisplayRules />
+    <EnableRules />
+  </RuleDefinitions>
+  <LocLabels>
+    <LocLabel Id="pl.ApplicationRibbon.Button.ViewFetchXML.LabelText">
+      <Titles>
+        <Title description="View FetchXML" languagecode="1033" />
+      </Titles>
+    </LocLabel>
+  </LocLabels>
+</RibbonDiffXml>
