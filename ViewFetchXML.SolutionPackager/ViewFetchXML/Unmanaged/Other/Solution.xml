@@ -6,9 +6,9 @@
       <LocalizedName description="View FetchXML" languagecode="1033" />
     </LocalizedNames>
     <Descriptions>
-      <Description description="+ Add another button near download FetchXML button in the advanced find window.&#xA;+ Direct view FetchXML in the open window, instead download FetchXML and view by XML viewer&#xA;+ Ready for Javascript code&#xA;+ Ready for CSharp code" languagecode="1033" />
+      <Description description="+ Add another button near download FetchXML button in the advanced find window.&#xA;+ Direct view FetchXML in the open window, instead download FetchXML and view by XML viewer&#xA;+ Ready for Javascript code&#xA;+ Ready for CSharp code&#xA;+ Ready for WebApi Js code" languagecode="1033" />
     </Descriptions>
-    <Version>1.3</Version>
+    <Version>1.4</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>phuocle</UniqueName>

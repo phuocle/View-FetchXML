@@ -62,7 +62,7 @@
     <value>1033</value>
   </metadata>
   <metadata name="Source file" xml:space="preserve">
-    <value>ViewFetchXML_1.3.00-1.-1.zip</value>
+    <value>ViewFetchXML_1.4.00-1.-1.zip</value>
   </metadata>
   <metadata name="Source package type" xml:space="preserve">
     <value>Unmanaged</value>
@@ -77,7 +77,8 @@
     <value>+ Add another button near download FetchXML button in the advanced find window.
 + Direct view FetchXML in the open window, instead download FetchXML and view by XML viewer
 + Ready for Javascript code
-+ Ready for CSharp code</value>
++ Ready for CSharp code
++ Ready for WebApi Js code</value>
     <comment> 'ViewFetchXML' : Description for Solution</comment>
   </data>
   <data name="15062:LocalizedName,phuoclepl50000" xml:space="preserve">
