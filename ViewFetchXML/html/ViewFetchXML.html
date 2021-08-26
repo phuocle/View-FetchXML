@@ -20,7 +20,7 @@
         <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Javascript')">FetchXML JS</a>
         <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'CSharp')">FetchXML CS</a>
         <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApiJs')">WebApi JS</a>
-        <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApiCs')">WebApi CS</a>
+        <!--<a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'WebApiCs')">WebApi CS</a>-->
     </div>
 
     <div id="FetchXML" class="tabcontent" style="display:block;">
@@ -43,17 +43,17 @@
             <textarea id="fetchXmlWebApiJs" name="fetchXmlWebApiJs" style="display:none;"></textarea><br />
         </form>
     </div>
-    <div id="WebApiCs" class="tabcontent" style="display: block; display: none;">
+    <!--<div id="WebApiCs" class="tabcontent" style="display: block; display: none;">
         <form>
             <textarea id="fetchXmlWebApiCs" name="fetchXmlWebApiCs" style="display:none;"></textarea><br />
         </form>
-    </div>
+    </div>-->
     <div class="button">
         <button class="copyFetchXML">Copy FetchXML</button>
         <button class="copyJavascript" style="display:none;">Copy Javascript</button>
         <button class="copyCSharp" style="display:none;">Copy CSharp</button>
         <button class="copyWebApiJs" style="display:none;">Copy WebApiJs</button>
-        <button class="copyWebApiCs" style="display:none;">Copy WebApiCs</button>
+        <!--<button class="copyWebApiCs" style="display:none;">Copy WebApiCs</button>-->
     </div>
     <div style="float:right;font-size:small;margin-top: -25px;padding-right: 5px;">
         <a href="https://github.com/phuocle/View-FetchXML" target="_blank">View FetchXML 1.4</a> by <a href="https://phuocle.net" target="_blank">PhuocLe</a>
@@ -68,12 +68,12 @@
         initClipboard_Js();
         initClipboard_CSharp();
         initClipboard_WebApiJs();
-        initClipboard_WebApiCs();
+        /*initClipboard_WebApiCs();*/
 
         document.getElementById("Javascript").style.display = "none";
         document.getElementById("CSharp").style.display = "none";
         document.getElementById("WebApiJs").style.display = "none";
-        document.getElementById("WebApiCs").style.display = "none";
+        /*document.getElementById("WebApiCs").style.display = "none";*/
     </script>
 </body>
 </html>

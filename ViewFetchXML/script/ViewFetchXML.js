@@ -246,66 +246,35 @@ function onViewFetchXMLWebApiJsLoad(output) {
         lineNumbers: false,
         readOnly: true
     });
-    var fetchXml = localStorage.getItem("CurrentFetchXml");
-    if (fetchXml.length == 0) return "ERROR";
-    fetchXml = fetchXml.replace(/"/g, "'");
-    var lines = vkbeautify.xml(fetchXml, 2).split('\n');
-    var data = [];
-    var name = "";
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        if (line.trim().startsWith("<condition")) {
-            var pattern = /('(.*?)' |'(.*?)'\/>)/g;
-            var arr = line.match(new RegExp(pattern));
-            name = arr[0].substring(1, arr[0].length - 2);
-            if (arr.length === 3 || arr.length === 5) {
-                var value = arr[arr.length - 1].substring(1, arr[arr.length - 1].length - 3);
-                var fetchData = getFetchData(data, name, value);
-                data.push({ name: fetchData.name, value: fetchData.value });
-            }
-        }
-        else if (line.trim().startsWith("<value")) {
-            var pattern = />.*</g;
-            var arr = line.match(new RegExp(pattern));
-            if (arr.length === 1) {
-                var value = arr[0].substring(1, arr[0].length - 1);
-                var fetchData = getFetchData(data, name, value);
-                data.push({ name: fetchData.name, value: fetchData.value });
-            }
-        }
+    var js = '';
+    var fetchDatas = JSON.parse(webApi.FetchData);
+    js = "\tvar fetchData = {\r\n";
+    for (var i = 0; i < fetchDatas.length; i++) {
+        var fetchData = fetchDatas[i];
+        var comment = getOptionSetComment(fetchData.Name2, fetchData.Value);
+        if (comment === '' && fetchData.Value2 !== '')
+            comment = fetchData.Value2;
+        js += "\t\t" + fetchData.Name2 + ": " + '`' + fetchData.Value + '`' + (comment.length > 0 ? " /* " + comment + " */" : "") + ',\r\n'
     }
-
-    var copied = convertFetchXmlToWebApiJs();
-
-    var declare = ""
-    if (data.length > 0) {
-        declare = "\tvar fetchData = {\r\n";
-        for (var i = 0; i < data.length; i++) {
-            var comment = getOptionSetComment(data[i].name, data[i].value);
-            declare += "\t\t" + data[i].name + ": " + '"' + data[i].value + '"' + (comment.length > 0 ? " /* " + comment + " */" : "") + ',\r\n'
-        }
-        declare = declare.substring(0, declare.length - ",\r\n".length);
-        declare += "\n";
-        declare += "\t};\r\n";
-    }
-    var webApi = declare + copied;
-    localStorage.setItem("webapijs", webApi);
-    editor.setValue(webApi);
+    js = js.substring(0, js.length - ",\r\n".length);
+    js += "\t};\r\n";
+    js += convertFetchXmlToWebApiJs();
+    localStorage.setItem("webapijs", js);
+    editor.setValue(js);
 }
 
 function convertFetchXmlToWebApiJs() {
     var options = ``;
     options += '\tvar options = `?\r\n';
-    //$select=name,_primarycontactid_value,telephone1,accountid&$expand=parentaccountid($select=accountnumber,name),transactioncurrencyid($select=isocurrencycode)&$filter=(accountid eq 60e1c27f-dd03-ec11-b6e5-000d3aa2e9c5) and (primarycontactid/contactid eq 74e1c27f-dd03-ec11-b6e5-000d3aa2e9c5) and (transactioncurrencyid/transactioncurrencyid eq f89d2c96-c802-ec11-b6e5-000d3aa2eb72)&$orderby=name asc
-    var url = webApi.WebApiJs.substring(webApi.WebApiJs.indexOf('?$') + 1);
-    //var array = url.split('$');
-    //for (var i = 0; i < array.length; i++) {
-    //    options += "$" + array[i] + "\r\n";
-    //}
-
-    options += url;
-
-    options += '\r\n`;\r\n';
+    if (webApi.Select !== '')
+        options += webApi.Select + '&\r\n';
+    if (webApi.Expand !== '')
+        options += webApi.Expand + '&\r\n';
+    if (webApi.Filter !== '')
+        options += webApi.Filter + '&\r\n';
+    if (webApi.OrderBy !== '')
+        options += webApi.OrderBy + '\r\n';
+    options += '`;\r\n';
     return options;
 }
 function initClipboard_FetchXML() {
@@ -356,17 +325,17 @@ function initClipboard_WebApiJs() {
     });
 }
 
-function initClipboard_WebApiCs() {
-    var clipboard = new Clipboard('.copyWebApiCs', {
-        text: function () {
-            var fetchXml = localStorage.getItem("webapics");
-            return fetchXml;
-        }
-    });
-    clipboard.on('success', function (e) {
-        alert("WebApiCs copied");
-    });
-}
+//function initClipboard_WebApiCs() {
+//    var clipboard = new Clipboard('.copyWebApiCs', {
+//        text: function () {
+//            var fetchXml = localStorage.getItem("webapics");
+//            return fetchXml;
+//        }
+//    });
+//    clipboard.on('success', function (e) {
+//        alert("WebApiCs copied");
+//    });
+//}
 
 function foundFetchData(data, name) {
     for (var i = 0; i < data.length; i++)
@@ -393,8 +362,11 @@ var loaded = {
     WebApiCs: false
 };
 var webApi = {
-    WebApiJs: '',
-    WebApiCs: ''
+    Select: '',
+    Expand: '',
+    Filter: '',
+    OderBy: '',
+    FetchData: ''
 };
 
 function openTab(evt, name) {
@@ -426,10 +398,13 @@ function openTab(evt, name) {
     }
     else if (name === 'WebApiJs' && !loaded.WebApiJs) {
         loaded.WebApiJs = true;
-        if (webApi.WebApiJs === '' && webApi.WebApiCs === '') {
+        if (webApi.Select === '') {
             callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
-                webApi.WebApiJs = output.WebApiJs;
-                webApi.WebApiCs = output.WebApiCs;
+                webApi.Select = output.Select;
+                webApi.Expand = output.Expand;
+                webApi.Filter = output.Filter;
+                webApi.OrderBy = output.OrderBy;
+                webApi.FetchData = output.FetchData;
                 onViewFetchXMLWebApiJsLoad();
             });
         }
@@ -437,19 +412,22 @@ function openTab(evt, name) {
             onViewFetchXMLWebApiJsLoad();
         }
     }
-    else if (name === 'WebApiCs' && !loaded.WebApiCs) {
-        loaded.WebApiCs = true;
-        if (webApi.WebApiJs === '' && webApi.WebApiCs === '') {
-            callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
-                webApi.WebApiJs = output.WebApiJs;
-                webApi.WebApiCs = output.WebApiCs;
-                onViewFetchXMLWebApiCsLoad();
-            });
-        }
-        else {
-            onViewFetchXMLWebApiCsLoad();
-        }
-    }
+    //else if (name === 'WebApiCs' && !loaded.WebApiCs) {
+    //    loaded.WebApiCs = true;
+    //    if (webApi.Select === '') {
+    //        callAction("ConvertFetchXmlToWebApi", { Url, FetchXml }, function (output) {
+    //            webApi.Select = output.Select;
+    //            webApi.Expand = output.Expand;
+    //            webApi.Filter = output.Filter;
+    //            webApi.OrderBy = output.OrderBy;
+    //            webApi.FetchData = output.FetchData;
+    //            onViewFetchXMLWebApiCsLoad();
+    //        });
+    //    }
+    //    else {
+    //        onViewFetchXMLWebApiCsLoad();
+    //    }
+    //}
 }
 
 function callAction(f, i, callback) {
